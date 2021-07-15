@@ -12,11 +12,11 @@ export class Task {
 
 	@Type(() => Date)
 	@Column({ type: 'timestamp' })
-	public date: Date
+	public date: string
 
 	@ManyToOne(() => Category, (c) => c.id, { nullable: false })
 	@JoinColumn({ name: 'categoryId' })
-	public category: Category
+	public category?: Category
 
 	@Column()
 	public categoryId: number

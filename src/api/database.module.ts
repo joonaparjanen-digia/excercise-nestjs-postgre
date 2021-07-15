@@ -16,7 +16,7 @@ import { Category } from './category/category.entity'
 				username: configService.get('POSTGRES_USER'),
 				password: configService.get('POSTGRES_PASSWORD'),
 				database: configService.get('POSTGRES_DB'),
-				entities: [Category,Task],
+				entities: [Category, Task],
 				synchronize: true,
 			}),
 		}),

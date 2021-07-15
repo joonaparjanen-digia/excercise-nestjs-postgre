@@ -14,8 +14,9 @@
     "incremental": true,
     "skipLibCheck": true,
     "paths": {
-      "#modules":["./src/modules"],
-      "#types":["./src/types"]
+      "#api/*":["./src/api/*"],
+      "#types":["./src/types"],
+      "#jest-mocks": ["./mocks"],
     }
   }
 }

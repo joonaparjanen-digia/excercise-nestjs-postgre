@@ -28,18 +28,27 @@
 
 ## Installation
 
-Add following content to file: `docker.env`
+### 1. Add following content to file: `.env`
+
 ```env
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
 POSTGRES_DB=nestjs
 PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=admin
+PORT=5050
 ```
 
-
+### 2. Install and run Docker Compose
 ```bash
-$ npm install
+$ docker-compose up
+```
+
+### 3. Install node modules
+```bash
+$ npm i
 ```
 
 ## Running the app
@@ -74,7 +83,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
 - Website - [https://nestjs.com](https://nestjs.com/)
 - Twitter - [@nestframework](https://twitter.com/nestframework)
 
