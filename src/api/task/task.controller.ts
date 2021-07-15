@@ -12,8 +12,8 @@ export class TasksController {
 	}
 
 	@Get()
-	findAll() {
-		return this.service.findAll()
+	find() {
+		return this.service.find()
 	}
 
 	@Get(':id')

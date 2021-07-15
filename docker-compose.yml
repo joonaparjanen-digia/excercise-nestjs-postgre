@@ -9,16 +9,6 @@ services:
     - postgres-data:/var/lib/postgresql/data
     env_file:
     - .env
- 
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    depends_on:
-      - postgres
-    ports:
-    - "5050:80"
-    env_file:
-    - .env
 
 volumes: 
   postgres-data:

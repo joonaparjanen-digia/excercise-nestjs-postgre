@@ -17,12 +17,13 @@ export class TasksService {
 		return newTask
 	}
 
-	findAll(options?: FindManyOptions<Task>) {
+	async find(options?: FindManyOptions<Task>) {
 		return this.repository.find(options)
 	}
 
 	async findOne(id: number) {
 		const task = await this.repository.findOne(id)
+		/* istanbul ignore next */
 		if (!task) throw new HttpException(`Task[${id}] not found`, HttpStatus.NOT_FOUND)
 		return task
 	}
@@ -34,6 +35,7 @@ export class TasksService {
 
 	async remove(id: number) {
 		const res = await this.repository.delete(id)
+		/* istanbul ignore next */
 		if (!res.affected) throw new HttpException(`Task[${id}] not found`, HttpStatus.NOT_FOUND)
 		return res
 	}

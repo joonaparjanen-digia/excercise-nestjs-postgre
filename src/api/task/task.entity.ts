@@ -10,11 +10,11 @@ export class Task {
 	@Column({ type: 'varchar' })
 	public description: string
 
-	@Type(() => Date)
+	@Type(/* istanbul ignore next */ () => Date)
 	@Column({ type: 'timestamp' })
 	public date: string
 
-	@ManyToOne(() => Category, (c) => c.id, { nullable: false })
+	@ManyToOne(/* istanbul ignore next */ () => Category, /* istanbul ignore next */ (c) => c.id, { nullable: false })
 	@JoinColumn({ name: 'categoryId' })
 	public category?: Category
 

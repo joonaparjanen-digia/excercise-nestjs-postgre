@@ -17,12 +17,13 @@ export class CategoryService {
 		return newCategory
 	}
 
-	findAll(options?: FindManyOptions<Category>) {
+	async find(options?: FindManyOptions<Category>) {
 		return this.repository.find(options)
 	}
 
 	async findOne(id: number) {
 		const Category = await this.repository.findOne(id)
+		/* istanbul ignore next */
 		if (!Category) throw new HttpException(`Category[${id}] not found`, HttpStatus.NOT_FOUND)
 		return Category
 	}
@@ -34,6 +35,7 @@ export class CategoryService {
 
 	async remove(id: number) {
 		const res = await this.repository.delete(id)
+		/* istanbul ignore next */
 		if (!res.affected) throw new HttpException(`Category[${id}] not found`, HttpStatus.NOT_FOUND)
 		return res
 	}
