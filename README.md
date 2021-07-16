@@ -64,18 +64,16 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## SwaggerUI 
+
+http://localhost:3000/docs/#/
+
+
 ## Test
 
 ```bash
-# unit tests
+# unit & e2e tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
 

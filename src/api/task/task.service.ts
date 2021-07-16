@@ -1,8 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { FindManyOptions, Repository } from 'typeorm'
-import { CreateTaskDto, UpdateTaskDto } from './task.dto'
+import { Repository } from 'typeorm'
+
+import { queryHelper } from '#utils'
+
+import { TaskCreateDTO, TaskUpdateDTO } from './task.dto'
 import { Task } from './task.entity'
+import { TaskQuery } from './task.dto'
 
 @Injectable()
 export class TasksService {
@@ -11,14 +15,27 @@ export class TasksService {
 		private repository: Repository<Task>
 	) {}
 
-	async create(task: CreateTaskDto) {
+	async create(task: TaskCreateDTO) {
 		const newTask = this.repository.create(task)
 		await this.repository.save(newTask)
 		return newTask
 	}
 
-	async find(options?: FindManyOptions<Task>) {
-		return this.repository.find(options)
+	async find(query: TaskQuery) {
+		const { categoryId, dateMin, dateMax } = query
+		let q = this.repository.createQueryBuilder()
+
+		if (categoryId) {
+			q = q.where('Task.categoryId = :categoryId', { categoryId })
+		}
+
+		if (dateMin > dateMax)
+			throw new HttpException('Bad Query: dateMax cannot be less than dateMin', HttpStatus.BAD_REQUEST)
+
+		q = queryHelper.whereDateRange(q, 'date', [dateMin, dateMax], categoryId === undefined ? undefined : 'and')
+		q = queryHelper.paginate(q, query)
+
+		return await q.getMany()
 	}
 
 	async findOne(id: number) {
@@ -28,7 +45,7 @@ export class TasksService {
 		return task
 	}
 
-	async update(id: number, task: UpdateTaskDto) {
+	async update(id: number, task: TaskUpdateDTO) {
 		await this.repository.update(id, task)
 		return this.findOne(id)
 	}

@@ -1,4 +1,4 @@
-import { CreateTaskDto, UpdateTaskDto } from '#api/task/task.dto'
+import { TaskCreateDTO, TaskUpdateDTO } from '#api/task/task.dto'
 import { Task } from '#api/task/task.entity'
 
 const DEF_DESC = 'Mock description'
@@ -16,7 +16,7 @@ export function task(id: number, categoryId = 1): Task {
 	}
 }
 
-export function createTaskDto(categoryId = 1): CreateTaskDto {
+export function createTaskDto(categoryId = 1): TaskCreateDTO {
 	return {
 		description: DEF_DESC,
 		date: DEF_DATE,
@@ -24,7 +24,7 @@ export function createTaskDto(categoryId = 1): CreateTaskDto {
 	}
 }
 
-export function updateTaskDto(id: number, categoryId = 1): UpdateTaskDto {
+export function updateTaskDto(id: number, categoryId = 1): TaskUpdateDTO {
 	return {
 		id,
 		description: UPD_DESC,

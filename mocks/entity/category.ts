@@ -1,4 +1,4 @@
-import { CreateCategoryDto, UpdateCategoryDto } from '#api/category/category.dto'
+import { CategoryCreateDTO, CategoryUpdateDTO } from '#api/category/category.dto'
 import { Category } from '#api/category/category.entity'
 
 const mockCategory: Category = {
@@ -6,11 +6,11 @@ const mockCategory: Category = {
 	name: 'Mock Name',
 }
 
-const mockCreateCategoryDto: CreateCategoryDto = {
+const mockCreateCategoryDto: CategoryCreateDTO = {
 	name: 'Mock Name',
 }
 
-const mockUpdateCategoryDto: UpdateCategoryDto = {
+const mockUpdateCategoryDto: CategoryUpdateDTO = {
 	id: 1,
 	name: 'Mock Name',
 }

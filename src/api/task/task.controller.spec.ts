@@ -6,11 +6,8 @@ import { TasksController } from './task.controller'
 import { TasksService } from './task.service'
 import { Task } from './task.entity'
 
-import { mockTaskService } from './task.service.spec'
-
 describe('TaskController', () => {
 	let controller: TasksController
-	let service: TasksService
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -19,7 +16,6 @@ describe('TaskController', () => {
 		}).compile()
 
 		controller = module.get<TasksController>(TasksController)
-		service = await mockTaskService()
 	})
 
 	it('should be defined', () => {
@@ -28,31 +24,69 @@ describe('TaskController', () => {
 
 	it('create', async () => {
 		const result = mock.task(1)
-		jest.spyOn(service, 'create').mockImplementation(async () => result)
 		expect(await controller.create(mock.createTaskDto())).toEqual(result)
 	})
 
-	it('find', async () => {
-		const result = [mock.task(1), mock.task(2)]
-		jest.spyOn(service, 'find').mockImplementation(async () => result)
-		expect(await controller.find()).toEqual(result)
+	describe('find', () => {
+		it('no params', async () => {
+			const result = [mock.task(1), mock.task(2)]
+			expect(await controller.find()).toEqual(result)
+		})
+
+		it('only pagination', async () => {
+			const result = [mock.task(1), mock.task(2)]
+			expect(await controller.find({ skip: 2, take: 2 })).toEqual(result)
+		})
+
+		it('only categoryId', async () => {
+			const result = [mock.task(1), mock.task(2)]
+			expect(await controller.find({ categoryId: 4 })).toEqual(result)
+		})
+
+		it('only minDate', async () => {
+			const result = [mock.task(1), mock.task(2)]
+			expect(await controller.find({ dateMin: new Date('2011.11.11').toISOString() })).toEqual(result)
+		})
+
+		it('only maxDate', async () => {
+			const result = [mock.task(1), mock.task(2)]
+			expect(await controller.find({ dateMax: new Date('2222.11.11').toISOString() })).toEqual(result)
+		})
+
+		it('only date range', async () => {
+			const result = [mock.task(1), mock.task(2)]
+			expect(
+				await controller.find({
+					dateMin: new Date('2011.11.11').toISOString(),
+					dateMax: new Date('2222.11.11').toISOString(),
+				})
+			).toEqual(result)
+		})
+
+		it('categoryId & date range', async () => {
+			const result = [mock.task(1), mock.task(2)]
+			expect(
+				await controller.find({
+					categoryId: 5,
+					dateMin: new Date('2011.11.11').toISOString(),
+					dateMax: new Date('2222.11.11').toISOString(),
+				})
+			).toEqual(result)
+		})
 	})
 
 	it('findOne', async () => {
 		const result = mock.task(1)
-		jest.spyOn(service, 'findOne').mockImplementation(async () => result)
 		expect(await controller.findOne('1')).toEqual(result)
 	})
 
 	it('update', async () => {
 		const result = mock.task(1)
-		jest.spyOn(service, 'update').mockImplementation(async () => result)
 		expect(await controller.update('1', mock.updateTaskDto(1))).toEqual(result)
 	})
 
 	it('remove', async () => {
 		const result = { affected: 1, raw: {} }
-		jest.spyOn(service, 'remove').mockImplementation(async () => result)
 		expect(await controller.remove('1')).toEqual(result)
 	})
 })

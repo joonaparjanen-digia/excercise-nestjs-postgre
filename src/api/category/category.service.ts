@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { FindManyOptions, Repository } from 'typeorm'
-import { CreateCategoryDto, UpdateCategoryDto } from './category.dto'
+import { CategoryCreateDTO, CategoryUpdateDTO } from './category.dto'
 import { Category } from './category.entity'
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CategoryService {
 		private repository: Repository<Category>
 	) {}
 
-	async create(Category: CreateCategoryDto) {
+	async create(Category: CategoryCreateDTO) {
 		const newCategory = this.repository.create(Category)
 		await this.repository.save(newCategory)
 		return newCategory
@@ -28,7 +28,7 @@ export class CategoryService {
 		return Category
 	}
 
-	async update(id: number, Category: UpdateCategoryDto) {
+	async update(id: number, Category: CategoryUpdateDTO) {
 		await this.repository.update(id, Category)
 		return this.findOne(id)
 	}

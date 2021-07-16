@@ -14,5 +14,13 @@ export const repository = <E extends EntityClassOrSchema>(
 		findOne: jest.fn().mockResolvedValue(entityData(1)),
 		update: jest.fn().mockReturnValue(Promise.resolve()),
 		delete: jest.fn().mockResolvedValue({ affected: 1, raw: {} }),
+		createQueryBuilder: jest.fn(() => ({
+			where: jest.fn().mockReturnThis(),
+			orWhere: jest.fn().mockReturnThis(),
+			andWhere: jest.fn().mockReturnThis(),
+			skip: jest.fn().mockReturnThis(),
+			take: jest.fn().mockReturnThis(),
+			getMany: jest.fn().mockResolvedValue([entityData(1), entityData(2)]),
+		})),
 	},
 })

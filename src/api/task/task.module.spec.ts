@@ -1,11 +1,28 @@
-import * as request from 'supertest'
+import request from 'supertest'
 import { Test, TestingModule } from '@nestjs/testing'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import { AppModule } from '#api/app.module'
 
 import * as mock from '#jest-mocks'
+import { TaskQuery } from './task.dto'
 
-describe('AppModule (e2e)', () => {
+type TaskQueryTest = [label: string, query: TaskQuery | undefined, expectedCode: number]
+
+const taskQueries: TaskQueryTest[] = [
+	['all', undefined, HttpStatus.OK],
+	['by categoryId', { categoryId: 7 }, HttpStatus.OK],
+	['by dateMin', { dateMin: '2011.11.11' }, HttpStatus.OK],
+	['by dateMax', { dateMin: '2022.11.11' }, HttpStatus.OK],
+	['by dateMin & dateMax', { dateMin: '2011.11.11', dateMax: '2022.11.11' }, HttpStatus.OK],
+	[
+		'by every param',
+		{ categoryId: 7, dateMin: '2011.11.11', dateMax: '2022.11.11', skip: 4, take: 2 },
+		HttpStatus.OK,
+	],
+	['by dateMin > dateMax', { dateMin: '2022.11.11', dateMax: '2011.11.11' }, HttpStatus.BAD_REQUEST],
+]
+
+describe('TaskModule (e2e)', () => {
 	let app: INestApplication = null
 
 	beforeAll(async () => {
@@ -15,41 +32,6 @@ describe('AppModule (e2e)', () => {
 
 		app = moduleFixture.createNestApplication()
 		await app.init()
-	})
-
-	describe('/category', () => {
-		let categoryId: number = null
-
-		it('POST', async () => {
-			const dto = mock.createCategoryDto()
-			const res = await request(app.getHttpServer()).post('/category').send(dto)
-			expect(res.statusCode).toBe(HttpStatus.CREATED)
-			categoryId = res.body.id
-			expect(res.body).toEqual(mock.category(categoryId))
-		})
-
-		it('GET', async () => {
-			await request(app.getHttpServer()).get('/category').send().expect(HttpStatus.OK)
-		})
-
-		it('GET:id', async () => {
-			await request(app.getHttpServer())
-				.get(`/category/${categoryId}`)
-				.send()
-				.expect(HttpStatus.OK, mock.category(categoryId))
-		})
-
-		it('PATCH:id', async () => {
-			const dto = mock.updateCategoryDto(categoryId)
-			const res = await request(app.getHttpServer()).patch(`/category/${categoryId}`).send(dto)
-			expect(res.statusCode).toBe(HttpStatus.OK)
-			expect(res.body).toEqual(dto)
-		})
-
-		it('DELETE:id', async () => {
-			const res = await request(app.getHttpServer()).delete(`/category/${categoryId}`).send()
-			expect(res.statusCode).toBe(HttpStatus.OK)
-		})
 	})
 
 	describe('/task', () => {
@@ -73,15 +55,12 @@ describe('AppModule (e2e)', () => {
 		})
 
 		describe('GET', () => {
-			it('all', async () => {
-				await request(app.getHttpServer()).get('/task').send().expect(HttpStatus.OK)
-			})
-			it('by categoryId', async () => {
-				await request(app.getHttpServer()).get('/task').send({}).expect(HttpStatus.OK)
-			})
-			it('by date', async () => {
-				await request(app.getHttpServer()).get('/task').send({}).expect(HttpStatus.OK)
-			})
+			for (let i = 0; i < taskQueries.length; i++) {
+				const [label, queryParams, status] = taskQueries[i]
+				it(label, async () => {
+					await request(app.getHttpServer()).get('/task').query(queryParams).send().expect(status)
+				})
+			}
 		})
 
 		it('GET:id', async () => {
