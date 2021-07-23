@@ -38,7 +38,7 @@ POSTGRES_PASSWORD=admin
 POSTGRES_DB=nestjs
 PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=admin
-PORT=5050
+PORT=3000
 ```
 
 ### 2. Install and run Docker Compose
@@ -46,22 +46,10 @@ PORT=5050
 $ docker-compose up
 ```
 
-### 3. Install node modules
-```bash
-$ npm i
-```
-
-## Running the app
+### 3. Attach running container to localhost
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ docker container nestjs attach
 ```
 
 ## SwaggerUI 
@@ -74,6 +62,7 @@ http://localhost:3000/docs/#/
 ```bash
 # unit & e2e tests
 $ npm run test
+```
 
 ## Support
 
